@@ -137,6 +137,9 @@ class Command(BaseCommand):
         self.stdout.write("4. Salir")
         self.stdout.write("-------------------------------")
         brand = input("Ingrese la funcion que desea obtener: ")
+        if brand=="4":
+             self.stdout.write("has salido de instagram")
+            
         if brand=="3":
             self.stdout.write("----------------------")
             self.stdout.write("ACCEDER")
@@ -362,7 +365,8 @@ class Command(BaseCommand):
              self.stdout.write("----------------------")
              print("Cantidad de  Usuarios", User.objects.all().count())
              self.stdout.write("")
-             print (User.objects.all())
+             for user in User.objects.all():
+                 print("pk={0}:  {1} - {2}".format(user.id, user.user, user.created_at))
              
         elif brand=="1":
             username = options[self.UserModel.USERNAME_FIELD]
@@ -687,7 +691,26 @@ class Command(BaseCommand):
                 self.stdout.write("3.3. Delete Post")
                 self.stdout.write("3.4. Menu Principal")
                 self.stdout.write("-------------------------------")
-                rand = input("Ingrese la funcion que desea obtener: ")
+                brand = input("Ingrese la funcion que desea obtener: ")
+                if brand=="3.1":
+                    self.stdout.write("----------------------")
+                    self.stdout.write("POST")
+                    self.stdout.write("----------------------")
+                    for post in Post.objects.all():
+                        print("pk={0}:  {1} - {2}".format(post.id, post.headline, post.pub_date, post.likes , post.dislikes))
+                    
+                    self.stdout.write("----------------------")
+                    self.stdout.write("Ingresar una nueva publicacion")
+                    self.stdout.write("----------------------")
+                    headline = input("Ingrese lo que desea escribir: ")
+                    pub_date = input("Ingrese la fecha como '2018-10-03': ")
+                    user = input("Ingrese usuario: ")
+                    self.create_post(headline, pub_date, user )
+                    print("Creación de usuario exitoso")
+                        
+
+
+
 
                 
 
@@ -702,3 +725,15 @@ class Command(BaseCommand):
         except exceptions.ValidationError as e:
 
             return '; '.join(e.messages)
+
+    def create_post(headline, likes,  pub_date, user ):
+
+        mi_post = Post(headline=headline, pub_date=pub_date, likes = likes,  user=user )
+
+        mi_post.save()
+    def create_post2(headline, pub_date, user ):
+
+        mi_post = Post(headline=headline, pub_date=pub_date, user=user )
+
+        mi_post.save()
+    
