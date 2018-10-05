@@ -735,10 +735,39 @@ class Command(BaseCommand):
                     #headline = input("Ingrese la publicacion que quieres dar like: ")
                     self.create_like(value )
                     self.acceder(nuevo )
+                    #self.createlike(value, like_by)
                     print("Creación de puntaje exitoso")
                     for value in Like.objects.all():
                         print(value.value, value.like_by)
-
+                if brand=="3.3":
+                    self.stdout.write("----------------------")
+                    self.stdout.write("DELETE POST")
+                    self.stdout.write("----------------------")
+                    self.stdout.write("Mis posts")
+                    self.stdout.write("----------------------")
+                    for post in Publish.objects.all():
+                        #print(post.id, post.nuevo)
+                        print("post={0}:  {1} - {2}".format(post.id, post.nuevo, post.post))
+                    eliminar = input("Ingrese la publicacion que quieres eliminar (recuerde empezar con 3.3.su numero: ")
+                    self.stdout.write("----------------------")
+                    if eliminar=="3.3.1":
+                        Publish.objects.get(pk=1).delete()
+                    if eliminar=="3.3.2":
+                        Publish.objects.get(pk=2).delete()
+                    if eliminar=="3.3.3":
+                        Publish.objects.get(pk=3).delete()
+                    if eliminar=="3.3.4":
+                        Publish.objects.get(pk=4).delete()
+                    if eliminar=="3.3.5":
+                        Publish.objects.get(pk=5).delete()
+                    if eliminar=="3.3.6":
+                        Publish.objects.get(pk=6).delete()
+                    if eliminar=="3.3.7":
+                        Publish.objects.get(pk=7).delete()
+                    for post in Publish.objects.all():
+                        #print(post.id, post.nuevo)
+                        print("post={0}:  {1} - {2}".format(post.id, post.nuevo, post.post))
+                    
                         
 
 
@@ -776,6 +805,11 @@ class Command(BaseCommand):
     def create_like(brand ,value):
 
         mi_like = Like(brand=brand ,value=value)
+
+        mi_like.save()
+    def createlike(brand ,value, like_by):
+
+        mi_like = Like(brand=brand ,value=value, like_by=like_by)
 
         mi_like.save()
     def acceder(post, nuevo):
