@@ -44,6 +44,21 @@ class Postear(models.Model):
 class Publish(models.Model):
     post = models.CharField(max_length=100)
     nuevo = models.CharField(max_length=100)
+class Like(models.Model):
+
+    brand = models.CharField(max_length=100)
+
+    value= models.IntegerField()
+
+    like_by = models.ForeignKey(Publish, null=True, on_delete=models.SET_NULL)
+class Likebyme(models.Model):
+
+    brand = models.CharField(max_length=100)
+
+    value= models.IntegerField()
+
+    like_by = models.ForeignKey(Post, null=True, on_delete=models.SET_NULL)
+
     
 
 

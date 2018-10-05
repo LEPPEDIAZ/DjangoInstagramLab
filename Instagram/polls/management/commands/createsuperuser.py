@@ -28,6 +28,7 @@ from polls.models import Follow
 from polls.models import Post
 from polls.models import Preference
 from polls.models import Publish
+from polls.models import Like
 from django.core.management.base import BaseCommand, CommandError
 
 
@@ -698,18 +699,18 @@ class Command(BaseCommand):
                     self.stdout.write("POST")
                     self.stdout.write("----------------------")
                     self.stdout.write("Creados por otros usuarios")
+                    self.stdout.write("----------------------")
                     for post in Post.objects.all():
                         print(post.user, post.headline, post.pub_date, post.likes , post.dislikes)
                     self.stdout.write("----------------------")
                     self.stdout.write("Creados por mi")
+                    self.stdout.write("----------------------")
                     for post in Publish.objects.all():
                         print( post.nuevo)
                     self.stdout.write("----------------------")
                     self.stdout.write("Ingresar una nueva publicacion")
                     self.stdout.write("----------------------")
                     post = input("Ingrese lo que desea escribir: ")
-                    pub_date = input("Ingrese la fecha como '2018-10-03': ")
-                    user = input("Ingrese usuario: ")
                     #self.create_post(headline, pub_date, user )
                     self.create_postear(post )
                     for post in Publish.objects.all():
@@ -718,17 +719,26 @@ class Command(BaseCommand):
                     self.stdout.write("----------------------")
                     self.stdout.write("LIKE POST")
                     self.stdout.write("----------------------")
+                    self.stdout.write("likes por otros usuarios")
+                    self.stdout.write("----------------------")
                     for preference in Preference.objects.all():
                         print("like={0}:  {1} - {2}".format(preference.value, preference.user, preference.post, preference.date))
                     self.stdout.write("----------------------")
+                    
+                    for post in Publish.objects.all():
+                        print(post.id, post.nuevo)
+                    self.stdout.write("----------------------")
                     self.stdout.write("Dar like a una publicacion")
                     self.stdout.write("----------------------")
-                    headline = input("Ingrese la publicacion que quieres dar like: ")
+                    nuevo = input("Ingrese la publicacion que quieres dar like: ")
+                    value = input("Ingrese el valor que le desea poner: ")
                     #headline = input("Ingrese la publicacion que quieres dar like: ")
-                    pub_date = input("Ingrese la fecha como '2018-10-03': ")
-                    user = input("Ingrese usuario: ")
-                    self.create_post(headline, pub_date, user )
-                    print("Creación de usuario exitoso")
+                    self.create_like(value )
+                    self.acceder(nuevo )
+                    print("Creación de puntaje exitoso")
+                    for value in Like.objects.all():
+                        print(value.value, value.like_by)
+
                         
 
 
@@ -763,4 +773,18 @@ class Command(BaseCommand):
         mi_post = Publish(post=post ,nuevo=nuevo)
 
         mi_post.save()
+    def create_like(brand ,value):
+
+        mi_like = Like(brand=brand ,value=value)
+
+        mi_like.save()
+    def acceder(post, nuevo):
+        try:
+            Publish.objects.get(post=post, nuevo=nuevo)
+
+            print("un like ingresado")
+
+        except:
+
+            print("Oops! no logramos conectar con publicacion")
     
