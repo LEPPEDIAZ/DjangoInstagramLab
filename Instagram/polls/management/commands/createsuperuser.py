@@ -27,6 +27,7 @@ from polls.models import User
 from polls.models import Follow
 from polls.models import Post
 from polls.models import Preference
+from polls.models import Publish
 from django.core.management.base import BaseCommand, CommandError
 
 
@@ -366,7 +367,7 @@ class Command(BaseCommand):
              print("Cantidad de  Usuarios", User.objects.all().count())
              self.stdout.write("")
              for user in User.objects.all():
-                 print("pk={0}:  {1} - {2}".format(user.id, user.user, user.created_at))
+                 print(user.id, user.user, user.created_at)
              
         elif brand=="1":
             username = options[self.UserModel.USERNAME_FIELD]
@@ -696,13 +697,34 @@ class Command(BaseCommand):
                     self.stdout.write("----------------------")
                     self.stdout.write("POST")
                     self.stdout.write("----------------------")
+                    self.stdout.write("Creados por otros usuarios")
                     for post in Post.objects.all():
-                        print("pk={0}:  {1} - {2}".format(post.id, post.headline, post.pub_date, post.likes , post.dislikes))
-                    
+                        print(post.user, post.headline, post.pub_date, post.likes , post.dislikes)
+                    self.stdout.write("----------------------")
+                    self.stdout.write("Creados por mi")
+                    for post in Publish.objects.all():
+                        print( post.nuevo)
                     self.stdout.write("----------------------")
                     self.stdout.write("Ingresar una nueva publicacion")
                     self.stdout.write("----------------------")
-                    headline = input("Ingrese lo que desea escribir: ")
+                    post = input("Ingrese lo que desea escribir: ")
+                    pub_date = input("Ingrese la fecha como '2018-10-03': ")
+                    user = input("Ingrese usuario: ")
+                    #self.create_post(headline, pub_date, user )
+                    self.create_postear(post )
+                    for post in Publish.objects.all():
+                        print(post.post, post.nuevo)
+                if brand=="3.2":
+                    self.stdout.write("----------------------")
+                    self.stdout.write("LIKE POST")
+                    self.stdout.write("----------------------")
+                    for preference in Preference.objects.all():
+                        print("like={0}:  {1} - {2}".format(preference.value, preference.user, preference.post, preference.date))
+                    self.stdout.write("----------------------")
+                    self.stdout.write("Dar like a una publicacion")
+                    self.stdout.write("----------------------")
+                    headline = input("Ingrese la publicacion que quieres dar like: ")
+                    #headline = input("Ingrese la publicacion que quieres dar like: ")
                     pub_date = input("Ingrese la fecha como '2018-10-03': ")
                     user = input("Ingrese usuario: ")
                     self.create_post(headline, pub_date, user )
@@ -734,6 +756,11 @@ class Command(BaseCommand):
     def create_post2(headline, pub_date, user ):
 
         mi_post = Post(headline=headline, pub_date=pub_date, user=user )
+
+        mi_post.save()
+    def create_postear(post , nuevo):
+
+        mi_post = Publish(post=post ,nuevo=nuevo)
 
         mi_post.save()
     

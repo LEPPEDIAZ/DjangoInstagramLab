@@ -39,5 +39,13 @@ class Preference(models.Model):
     class Meta:
        unique_together = ("user", "post", "value")
 
+class Postear(models.Model):
+    post = models.CharField(max_length=100)
+class Publish(models.Model):
+    post = models.CharField(max_length=100)
+    nuevo = models.CharField(max_length=100)
+    
+
+
 
 # Create your models here.
